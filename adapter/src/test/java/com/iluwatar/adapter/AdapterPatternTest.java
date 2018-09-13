@@ -1,68 +1,78 @@
+/**
+ * The MIT License
+ * Copyright (c) 2014-2016 Ilkka Seppälä
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.iluwatar.adapter;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 /**
- * An adapter helps two incompatible interfaces to work together. This is the real world definition
- * for an adapter. Interfaces may be incompatible but the inner functionality should suit the need.
- * The Adapter design pattern allows otherwise incompatible classes to work together by converting
- * the interface of one class into an interface expected by the clients.
+ * Test class
  * 
- * <p>There are two variations of the Adapter pattern: 
- * The class adapter implements the adaptee's
- * interface whereas the object adapter uses composition to contain the adaptee in the adapter
- * object. This example uses the object adapter approach.
- * 
- * <p>The Adapter ({@link GnomeEngineer}) converts the interface 
- * of the target class ({@link GoblinGlider}) into a suitable one expected by 
- * the client ({@link GnomeEngineeringManager}
- * ).
  */
 public class AdapterPatternTest {
 
   private Map<String, Object> beans;
 
-  private static final String ENGINEER_BEAN = "engineer";
+  private static final String FISHING_BEAN = "fisher";
 
-  private static final String MANAGER_BEAN = "manager";
+  private static final String ROWING_BEAN = "captain";
 
   /**
    * This method runs before the test execution and sets the bean objects in the beans Map.
    */
-  @Before
+  @BeforeEach
   public void setup() {
     beans = new HashMap<>();
 
-    GnomeEngineer gnomeEngineer = spy(new GnomeEngineer());
-    beans.put(ENGINEER_BEAN, gnomeEngineer);
+    FishingBoatAdapter fishingBoatAdapter = spy(new FishingBoatAdapter());
+    beans.put(FISHING_BEAN, fishingBoatAdapter);
 
-    GnomeEngineeringManager manager = new GnomeEngineeringManager();
-    manager.setEngineer((GnomeEngineer) beans.get(ENGINEER_BEAN));
-    beans.put(MANAGER_BEAN, manager);
+    Captain captain = new Captain();
+    captain.setRowingBoat((FishingBoatAdapter) beans.get(FISHING_BEAN));
+    beans.put(ROWING_BEAN, captain);
   }
 
   /**
-   * This test asserts that when we call operateDevice() method on a manager bean, it is internally
-   * calling operateDevice method on the engineer object. The Adapter ({@link GnomeEngineer})
-   * converts the interface of the target class ( {@link GoblinGlider}) into a suitable one expected
-   * by the client ({@link GnomeEngineeringManager} ).
+   * This test asserts that when we use the row() method on a captain bean(client), it is
+   * internally calling sail method on the fishing boat object. The Adapter ({@link FishingBoatAdapter}
+   * ) converts the interface of the target class ( {@link FishingBoat}) into a suitable one
+   * expected by the client ({@link Captain} ).
    */
   @Test
   public void testAdapter() {
-    Engineer manager = (Engineer) beans.get(MANAGER_BEAN);
+    Captain captain = (Captain) beans.get(ROWING_BEAN);
 
-    // when manager is asked to operate device
-    manager.operateDevice();
+    // when captain moves
+    captain.row();
 
-    // Manager internally calls the engineer object to operateDevice
-    Engineer engineer = (Engineer) beans.get(ENGINEER_BEAN);
-    verify(engineer).operateDevice();
+    // the captain internally calls the battleship object to move
+    RowingBoat adapter = (RowingBoat) beans.get(FISHING_BEAN);
+    verify(adapter).row();
   }
 }

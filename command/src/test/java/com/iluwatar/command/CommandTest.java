@@ -1,8 +1,30 @@
+/**
+ * The MIT License
+ * Copyright (c) 2014-2016 Ilkka Seppälä
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.iluwatar.command;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The Command pattern is a behavioral design pattern in which an object is used to encapsulate all
@@ -59,13 +81,13 @@ public class CommandTest {
    * @param goblin a goblin object whose state is to be verified against other parameters
    * @param expectedName expectedName of the goblin
    * @param expectedSize expected size of the goblin
-   * @param expectedVisibilty exepcted visibility of the goblin
+   * @param expectedVisibility expected visibility of the goblin
    */
   private void verifyGoblin(Goblin goblin, String expectedName, Size expectedSize,
-      Visibility expectedVisibilty) {
-    assertEquals("Goblin's name must be same as expectedName", expectedName, goblin.toString());
-    assertEquals("Goblin's size must be same as expectedSize", expectedSize, goblin.getSize());
-    assertEquals("Goblin's visibility must be same as expectedVisibility", expectedVisibilty,
-        goblin.getVisibility());
+      Visibility expectedVisibility) {
+    assertEquals(expectedName, goblin.toString(), "Goblin's name must be same as expectedName");
+    assertEquals(expectedSize, goblin.getSize(), "Goblin's size must be same as expectedSize");
+    assertEquals(expectedVisibility, goblin.getVisibility(),
+            "Goblin's visibility must be same as expectedVisibility");
   }
 }

@@ -1,5 +1,30 @@
+/**
+ * The MIT License
+ * Copyright (c) 2014-2016 Ilkka Seppälä
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 package com.iluwatar.twin;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a UI thread for drawing the {@link BallItem}, and provide the method for suspend
@@ -8,6 +33,8 @@ package com.iluwatar.twin;
  */
 
 public class BallThread extends Thread {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BallThread.class);
 
   private BallItem twin;
 
@@ -19,30 +46,32 @@ public class BallThread extends Thread {
     this.twin = twin;
   }
 
+  /**
+   * Run the thread
+   */
   public void run() {
 
     while (isRunning) {
-      while (!isSuspended) {
+      if (!isSuspended) {
         twin.draw();
         twin.move();
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
-
+      }
+      try {
+        Thread.sleep(250);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
       }
     }
   }
 
   public void suspendMe() {
     isSuspended = true;
-    System.out.println("Begin to suspend BallThread");
+    LOGGER.info("Begin to suspend BallThread");
   }
 
   public void resumeMe() {
     isSuspended = false;
-    System.out.println("Begin to resume BallThread");
+    LOGGER.info("Begin to resume BallThread");
   }
 
   public void stopMe() {
